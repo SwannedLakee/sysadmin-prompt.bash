@@ -299,7 +299,7 @@ function sypro_prompt_command() {
   elif __sypro_detect_ssh $PPID; then
     is_ssh=t
   else
-    unset is_ssh=''
+    unset is_ssh
   fi
   if test -v is_ssh; then
     is_ssh="${sypro_colors[ssh]}(ssh)$r"
