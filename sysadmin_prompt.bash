@@ -259,10 +259,11 @@ function sypro_prompt_command() {
 
   # we look up username and hostname every prompt to account for changes; but
   # use a cache to avoid lenghty recomputations.
-  if ! test -v "${__sypro_color_cache[`hostname`]}"; then
-    __sypro_color_cache[`hostname`]="$(sypro_pick_color `hostname`)"
+  local hostname=`uname -n`
+  if ! test -v "${__sypro_color_cache[$hostname]}"; then
+    __sypro_color_cache[$hostname]="$(sypro_pick_color $hostname)"
   fi
-  local hostcolor="${__sypro_color_cache[`hostname`]}"
+  local hostcolor="${__sypro_color_cache[$hostname]}"
 
   local euidcolor
   # testing for number rather than 'root' allows root aliases.
@@ -274,9 +275,9 @@ function sypro_prompt_command() {
     fi
     euidcolor="${__sypro_color_cache[$USER]}"
   fi
-  # $USER and `hostname` seem to be more dynamic than PS1 \u / \h
+  # $USER and `uname -n` seem to be more dynamic than PS1 \u / \h
   local user="$euidcolor$USER$r"
-  local host="$hostcolor`hostname`$r"
+  local host="$hostcolor$hostname$r"
 
   local is_ssh
   # posixly find out if we're in an ssh section, even under sudo/su and friends.
