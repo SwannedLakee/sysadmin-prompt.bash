@@ -206,7 +206,7 @@ function __sypro_setup()
 
     # duck test for gnu grep or compatible options, for nicer reporting.
     local colorgrep='grep --with-filename --color --context 2'
-    if ! echo -n . | $colorgrep -qn "\." 2>&1; then
+    if ! echo -n . | $colorgrep -qn "\." 2>/dev/null; then
       # didn't work, go with posix options only
       colorgrep='grep'
     fi
