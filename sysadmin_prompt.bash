@@ -275,13 +275,14 @@ function sypro_prompt_command() {
     fi
     euidcolor="${__sypro_color_cache[$USER]}"
   fi
-  # $USER and `uname -n` seem to be more dynamic than PS1 \u / \h
+  # $USER and `uname -n` seem to be more dynamic than the PS1 escapes \u and \h
   local user="$euidcolor$USER$r"
   local host="$hostcolor$hostname$r"
 
   local is_ssh
-  # posixly find out if we're in an ssh section, even under sudo/su and friends.
-  # call with current shell pid or PPID, it will recurse through parents.
+  # posixly find out if we're in an ssh session, even under sudo/su and
+  # friends.  call with current shell pid or PPID, it will recurse through
+  # parents.
   function __sypro_detect_ssh(){
     local pid="$1"
     if [ -z $pid ] || [ $pid = 1 ]; then
