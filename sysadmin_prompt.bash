@@ -321,7 +321,7 @@ function sypro_prompt_command() {
     -|'') runtime=-;;
     *) runtime="${sypro_colors[timer]}${__sypro_timer_elapsed}${r}${dim}s${r}";;
   esac
-  PS1="$r$user$dim@$r$host$is_ssh$isvirt$dim(e:$last_status$dim,$runtime)(j:${bgcount})$r \w$git\n$euidcolor>"'\$'"$r "
+  PS1="$r$user$dim@$r$host$is_ssh$isvirt$dim(e:$last_status$dim,$runtime$dim)(j:${bgcount}$dim)$r \w$git\n$euidcolor>"'\$'"$r "
   __sypro_timer_restart
 }
 
