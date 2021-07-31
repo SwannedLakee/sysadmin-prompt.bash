@@ -132,7 +132,7 @@ function __sypro_setup()
   local isvirt
   if [ -f /.dockerenv ]; then
     isvirt=docker
-  elif grep --quiet lxc /proc/1/cgroup; then
+  elif [ -r /proc/1/cgroup ] && grep -q lxc /proc/1/cgroup; then
     isvirt=lxc
   elif type -t virt-what >/dev/null 2>&1; then
     isvirt=`virt-what 2>/dev/null || sudo --non-interactive virt-what 2>/dev/null`
