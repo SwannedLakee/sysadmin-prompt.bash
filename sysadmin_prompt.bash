@@ -211,7 +211,11 @@ function __sypro_setup()
       colorgrep='grep'
     fi
 
-    if ! grep -v '^[[:space:]]*#' ~/.bashrc \
+    if ! [ -f ~/.bashrc ]; then
+      echo "No ~/.bashrc, will create it."
+    fi
+
+    if ! [ -f ~/.bashrc ] || ! grep -v '^[[:space:]]*#' ~/.bashrc \
        | $colorgrep -n \
       "\<$(basename "$sypro_src")\>" \
       ~/.bashrc
