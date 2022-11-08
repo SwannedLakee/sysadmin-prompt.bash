@@ -53,9 +53,9 @@ Notes
 =====
 
 [1] "anywhere": currently this is only tested on recent-ish Linux+bash combos
-(ca. 2017 onwards), and works best with at least a few POSIX tools around.  It
-doesn't depend on GNU stuff.  Pull requests for portability will be accepted,
-including for older bash versions, but this project isn't meant for POSIX sh or
-zsh or other shells (if you can run better shells, it's probably a host you can
-configure freely and run fish, right?).  Contributors please take care with
-performance hits in the prompt_command function.
+(ca. 2017 onwards) and OpenWRT.  It and works best with at least a few POSIX
+tools around, and doesn't depend on GNU stuff.  Pull requests for portability
+will be accepted, including for older bash versions, but this project isn't
+meant for POSIX sh or zsh or other shells (if you can run better shells, it's
+probably a host you can configure freely and run fish, right?).  Contributors
+please take care with performance hits in the prompt_command function.
