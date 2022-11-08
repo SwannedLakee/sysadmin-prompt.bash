@@ -302,7 +302,7 @@ function sypro_prompt_command() {
   }
   if test -v SSH_CLIENT || test -v SSH_TTY; then
     is_ssh=t
-  elif __sypro_detect_ssh $PPID; then
+  elif [ $PPID -ne 0 ] && __sypro_detect_ssh $PPID; then
     is_ssh=t
   else
     unset is_ssh
