@@ -299,12 +299,12 @@ function sypro_prompt_command {
         fi
 
         local cmd
-        cmd="$(ps -o comm= -p "$pid")"
+        cmd="$(ps -o comm= -p "$pid" )"
         if echo -n "$cmd"|grep -q "\<sshd\?\>"; then
             return 0
         fi
 
-        __sypro_detect_ssh "$(ps -o ppid= -p "$pid")"
+        __sypro_detect_ssh "$(ps -o ppid= -p "$pid" | tr -d '[:space:]')"
     }
 
     if test -v SSH_CLIENT || test -v SSH_TTY; then
