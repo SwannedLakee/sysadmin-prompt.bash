@@ -21,6 +21,7 @@
 # this is customizable later.
 declare -A sypro_colors=(
 [red]="\[\e[31m\]"
+[green]="\[\e[32m\]"
 [yellow]="\[\e[33m\]"
 [blue]="\[\e[34m\]"
 [magenta]="\[\e[35m\]"
@@ -39,6 +40,8 @@ sypro_colors[virt]=${sypro_colors[normal]}${sypro_colors[cyan]}
 sypro_colors[git]=${sypro_colors[bold]}${sypro_colors[yellow]}
 # marker if we're in an ssh session
 sypro_colors[ssh]=${sypro_colors[dim]}
+# marker if we're in an adb session
+sypro_colors[adb]=${sypro_colors[dim]}${sypro_colors[green]}
 # how many seconds since last command.
 sypro_colors[timer]=${sypro_colors[normal]}${sypro_colors[cyan]}
 # number of jobs in background
@@ -374,6 +377,11 @@ function sypro_prompt_command {
     fi
     unset __sypro_detect_ssh
 
+    if env | grep -q '^ANDROID_SOCKET_'; then
+        local is_adb="${sypro_colors[adb]}(adb)$r"
+    fi
+
+
     if type -t __git_ps1 >/dev/null 2>&1; then
         local git
         git="${sypro_colors[git]}$(__git_ps1 '::%s')$r"
@@ -391,7 +399,7 @@ function sypro_prompt_command {
         *) runtime="${sypro_colors[timer]}${__sypro_timer_elapsed}${r}${dim}s${r}"
             ;;
     esac
-    PS1="$r$user$dim@$r$host$is_ssh$isvirt$dim(e:$last_status$dim,$runtime$dim)(j:${bgcount}$dim)$r \w$git\n$euidcolor>"'\$'"$r "
+    PS1="$r$user$dim@$r$host$is_ssh$is_adb$isvirt$dim(e:$last_status$dim,$runtime$dim)(j:${bgcount}$dim)$r \w$git\n$euidcolor>"'\$'"$r "
     __sypro_timer_restart
 }
 
