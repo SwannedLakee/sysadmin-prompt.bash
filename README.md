@@ -47,15 +47,24 @@ Prompt features
 
 TODO
 ====
-Light background mode.
+ - Light background mode.
+ - Better perfomance on android.
+ - Test suite.
 
-Notes
-=====
+Compatibility notes
+===================
 
-[1] "anywhere": currently this is only tested on recent-ish Linux+bash combos
-(ca. 2017 onwards) and OpenWRT.  It and works best with at least a few POSIX
-tools around, and doesn't depend on GNU stuff.  Pull requests for portability
-will be accepted, including for older bash versions, but this project isn't
-meant for POSIX sh or zsh or other shells (if you can run better shells, it's
-probably a host you can configure freely and run fish, right?).  Contributors
-please take care with performance hits in the prompt_command function.
+This prompt has been tested extensively on recent-ish Linux+bash combos (ca.
+2017 onwards).
+
+It's also been used with zero configuration on BSD, OpenWRT, pfSense, LXD-LXC
+containers, and Docker containers.  No seeming issues, but not as tested.
+
+Suport for Android bash under adb is preliminary.  The current release may
+need manual installation, and not be as performant.
+
+Pull requests for portability will be accepted, including for older bash
+versions, but this project isn't meant for POSIX sh or zsh or other shells (if
+you can run better shells, it's probably a host you can configure freely and
+run fish, right?).  Contributors please take care with performance hits in the
+`prompt_command` function.

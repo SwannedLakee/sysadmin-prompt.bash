@@ -193,17 +193,71 @@ function __sypro_setup {
 
     # process the install command.
     if [ "$1" ] && [ "$1" = install ]; then
+        if ! [ "$PWD" ]; then
+            PWD="$(pwd)"
+            if ! [ "$PWD" ]; then
+                echo "ERROR: 'install' called, but we can't determine" \
+                     "the working directory \$PWD." >&2
+                echo "Check for permission issues, symlinks, or" \
+                     "deleted directories." >&2
+                if [ "$ANDROID_DATA" ]; then
+                    echo "This system appears to be Android, which may" \
+                         "restrict script access.  Please install manually." \
+                         >&2
+                fi
+                exit 1
+            fi
+        fi
+
         # works with 'source'
         if [ "${BASH_SOURCE[0]}" ] && [ -r "${BASH_SOURCE[0]}" ]; then
             local sypro_src="${BASH_SOURCE[0]}"
             # works if called as script
-        elif [ "$0" ] && [ -r "$0" ]; then
+        elif [ "$0" ] && [ "$0" != 'bash' ]; then
             local sypro_src="$0"
+        fi
+
+        if ! [ "$sypro_src" ]; then
+            echo >&2 "ERROR: Could not determine own script file name!"
+            if [ "$ANDROID_ROOT" ] || [ "$ANDROID_DATA" ]; then
+                echo >&2 "This appears to be an Android system, which" \
+                    "may restrict script capabilities."
+            fi
+            echo "Please install sysadmin_prompt manually :^)"
+            exit 1
+
         else
-            echo "ERROR: 'install' called but can't read source. " \
-                'This should never happen :)' \
-                >&2
-                            exit 1
+            if ! echo "$sypro_src" | grep -q '/'; then
+                sypro_src="$PWD/$sypro_src"
+            fi
+            if ! [ -f "$0" ]; then
+              cat >&2 <<EOS
+ERROR: 'install' called from '$sypro_src', but the file
+'$sypro_src' appears not to exist.
+
+This should never happen :)
+
+Please double-check for paths, permissions, symlinks, and parent directories,
+or install sysadmin_prompt manually.
+
+Giving up on auto-install.
+pwd was: env: '$PWD', command: $(pwd).
+EOS
+            fi
+            if ! [ -r "$0" ]; then
+                cat >&2 <<EOS
+ERROR: 'install' called from '$sypro_src', but the file
+'$sypro_src' seems to be unreadable.
+
+This should never happen :)
+
+Please double-check for permissions, symlinks, and parent directories,
+or install sysadmin_prompt manually.
+
+Proceeding with installation.
+pwd was: env: '$PWD', command: $(pwd).
+EOS
+            fi
         fi
 
         # duck test for gnu grep or compatible options, for nicer reporting.
@@ -213,21 +267,22 @@ function __sypro_setup {
             colorgrep='grep'
         fi
 
-        if ! [ -f ~/.bashrc ]; then
-            echo "No ~/.bashrc, will create it."
+        if ! [ -f "$HOME/.bashrc" ]; then
+            echo "No '$HOME/.bashrc', will create it."
         fi
 
-        if ! [ -f ~/.bashrc ] || ! grep -v '^[[:space:]]*#' ~/.bashrc \
+        if ! [ -f "$HOME/.bashrc" ] || \
+           ! grep -v '^[[:space:]]*#' "$HOME/.bashrc" \
             | $colorgrep -n \
             "\<$(basename "$sypro_src")\>" \
-            ~/.bashrc
+            "$HOME/.bashrc"
                 then
-                    echo "[ -r '$sypro_src' ] && source '$sypro_src'" \
-                        >> ~/.bashrc
-                    echo "Appended a line to ~/.bashrc ."
+                    echo "[ -f '$sypro_src' ] && source '$sypro_src'" \
+                        >> "$HOME/.bashrc"
+                    echo "Appended a line to '$HOME/.bashrc' ."
                 else
-                    echo -en "\n^ above: $(basename "$sypro_src") "
-                    echo "seems to be already in ~/.bashrc, not installing."
+                    echo -en "\n^ above: $(basename "$sypro_src") seems to be"
+                    echo "already in '$HOME/.bashrc'; not installing."
         fi
     fi
 
