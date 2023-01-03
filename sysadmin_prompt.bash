@@ -17,9 +17,14 @@
 # Limited customization is possible by altering the envvar $sypro_colors after
 # sourcing. It's an associative array, see below for keys.
 
+# duck test for bash >=4.x
+if ! declare -A sypro_colors 2>/dev/null; then
+    echo "sysadmin_prompt: error: incompatible bash version, skipping prompt."
+    return
+fi
 
 # this is customizable later.
-declare -A sypro_colors=(
+sypro_colors=(
 [red]="\[\e[31m\]"
 [green]="\[\e[32m\]"
 [yellow]="\[\e[33m\]"
