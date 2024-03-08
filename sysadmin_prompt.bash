@@ -149,6 +149,7 @@ function __sypro_setup {
     elif type -t virt-what >/dev/null 2>&1; then
         isvirt="$(virt-what 2>/dev/null \
             || sudo --non-interactive virt-what 2>/dev/null)"
+	isvirt="$(echo -n "$isvirt" | tr '\n' '|')"
     elif type -t systemd-detect-virt >/dev/null 2>&1; then
         isvirt="$(systemd-detect-virt 2>/dev/null)"
     # # ruby is too slow :p
